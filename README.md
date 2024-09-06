@@ -2,8 +2,7 @@
 
 ## Preview
 
-![Main View](preview/iphone.gif)
-
+<img src="./preview/iphone.gif" alt="Main View" width="200" height="400" /> 
 
 ## Get started
 
