@@ -11,6 +11,7 @@ import WorkoutCard from "@/components/WorkoutCard";
 import { useWorkout } from "@/context/WorkoutContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Workout } from "@/types/workout.types";
+import ShimmerPlaceholder from "@/components/ShimmerPlaceholder";
 
 export default function HomeScreen() {
   const { workouts, fetchWorkouts, noMoreData } = useWorkout();
@@ -47,40 +48,44 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <FlatList
-        data={workouts}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        renderItem={({ item, index }) => (
-          <WorkoutCard
-            workout={item}
-            index={index}
-            currentIndex={currentIndex}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.1}
-        removeClippedSubviews
-        initialNumToRender={1}
-        maxToRenderPerBatch={3}
-        snapToAlignment="start"
-        windowSize={3}
-        pagingEnabled
-        ListFooterComponent={
-          loading && !noMoreData ? (
-            <ActivityIndicator size="large" color="#fff" />
-          ) : null
-        }
-      />
+      {workouts.length === 0 ? (
+        <ShimmerPlaceholder style={styles.placeholderCard} />
+      ) : (
+        <FlatList
+          data={workouts}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          renderItem={({ item, index }) => (
+            <WorkoutCard
+              workout={item}
+              index={index}
+              currentIndex={currentIndex}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
+          onEndReached={fetchMore}
+          onEndReachedThreshold={0.1}
+          removeClippedSubviews
+          initialNumToRender={1}
+          maxToRenderPerBatch={3}
+          snapToAlignment="start"
+          windowSize={3}
+          pagingEnabled
+          ListFooterComponent={
+            loading && !noMoreData ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : null
+          }
+        />
+      )}
     </ThemedView>
   );
 }
 
 const useStyles = () => {
   const { top } = useSafeAreaInsets();
-
+  const { width, height } = Dimensions.get("window");
   return useMemo(
     () =>
       StyleSheet.create({
@@ -88,7 +93,14 @@ const useStyles = () => {
           flex: 1,
           paddingTop: top,
         },
+        placeholderCard: {
+          width: width - 48,
+          height: height * 0.8,
+          marginVertical: 15,
+          marginHorizontal: 24,
+          borderRadius: 10,
+        },
       }),
-    [top]
+    [top, width, height]
   );
 };

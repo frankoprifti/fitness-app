@@ -48,6 +48,8 @@ export default function WorkoutCard({
   useEffect(() => {
     if (isViewing) {
       player.play();
+    } else {
+      player?.pause();
     }
 
     if (isMuted) {
