@@ -1,5 +1,10 @@
 # Welcome to FitnessApp 👋
 
+## Preview
+
+![Main View](preview/iphone.gif)
+
+
 ## Get started
 
 1. Install dependencies
